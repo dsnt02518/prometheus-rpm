@@ -1,13 +1,13 @@
 %define debug_package %{nil}
 
-Name:		node-exporter
-Version:	0.12.0
+Name:		mysqld-exporter
+Version:	0.8.1
 Release:	1%{?dist}
-Summary:	Prometheus exporter for machine metrics, written in Go with pluggable metric collectors.
+Summary:	Prometheus exporter for MySQL server metrics. Supported MySQL versions: 5.1 and up. NOTE: Not all collection methods are support on MySQL < 5.6
 Group:		System Environment/Daemons
 License:	See the LICENSE file at github.
-URL:		https://github.com/prometheus/node_exporter
-Source0:        https://github.com/prometheus/node_exporter/releases/download/%{version}/node_exporter-%{version}.linux-amd64.tar.gz
+URL:		https://github.com/prometheus/mysqld_exporter
+Source0:        https://github.com/prometheus/mysqld_exporter/releases/download/%{version}/mysqld_exporter-%{version}.linux-amd64.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 Requires(pre):  /usr/sbin/useradd
 %if 0%{?rhel} >= 7
@@ -17,10 +17,10 @@ AutoReqProv:	No
 
 %description
 
-Prometheus exporter for machine metrics, written in Go with pluggable metric collectors.
+Prometheus exporter for MySQL server metrics. Supported MySQL versions: 5.1 and up. NOTE: Not all collection methods are support on MySQL < 5.6
 
 %prep
-%setup -q -n node_exporter-%{version}.linux-amd64
+%setup -q -n mysqld_exporter-%{version}.linux-amd64
 
 %build
 echo
@@ -32,9 +32,9 @@ mkdir -vp $RPM_BUILD_ROOT/var/lib/prometheus
 mkdir -vp $RPM_BUILD_ROOT/usr/bin
 mkdir -vp $RPM_BUILD_ROOT/etc/init.d
 mkdir -vp $RPM_BUILD_ROOT/etc/sysconfig
-install -m 755 node_exporter-%{version}.linux-amd64/node_exporter $RPM_BUILD_ROOT/usr/bin/node_exporter
-install -m 755 contrib/node_exporter.init $RPM_BUILD_ROOT/etc/init.d/node_exporter
-install -m 644 contrib/node_exporter.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/node_exporter
+install -m 755 mysqld_exporter-%{version}.linux-amd64/mysqld_exporter $RPM_BUILD_ROOT/usr/bin/mysqld_exporter
+install -m 755 contrib/mysqld_exporter.init $RPM_BUILD_ROOT/etc/init.d/mysqld_exporter
+install -m 644 contrib/mysqld_exporter.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/mysqld_exporter
 
 %clean
 
@@ -53,8 +53,8 @@ chmod 744 /var/log/prometheus
 
 %files
 %defattr(-,root,root,-)
-/usr/bin/node_exporter
-/etc/init.d/node_exporter
-%config(noreplace) /etc/sysconfig/node_exporter
+/usr/bin/mysqld_exporter
+/etc/init.d/mysqld_exporter
+%config(noreplace) /etc/sysconfig/mysqld_exporter
 /var/run/prometheus
 /var/log/prometheus

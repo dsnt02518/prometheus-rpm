@@ -1,26 +1,28 @@
 %define debug_package %{nil}
 
-Name:		node-exporter
-Version:	0.12.0
+Name:		rabbitmq-exporter
+Version:	0.13.1
 Release:	1%{?dist}
-Summary:	Prometheus exporter for machine metrics, written in Go with pluggable metric collectors.
+Summary:	Rabbit  exporter for machine metrics for prometheus
 Group:		System Environment/Daemons
 License:	See the LICENSE file at github.
-URL:		https://github.com/prometheus/node_exporter
-Source0:        https://github.com/prometheus/node_exporter/releases/download/%{version}/node_exporter-%{version}.linux-amd64.tar.gz
+URL:		https://github.com/kbudde/rabbitmq_exporter
+Source0:        https://github.com/kbudde/rabbitmq_exporter/releases/download/%{version}/rabbitmq_exporter-%{version}.linux-amd64.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 Requires(pre):  /usr/sbin/useradd
+
 %if 0%{?rhel} >= 7
 Requires:	daemonize
 %endif
+
 AutoReqProv:	No
 
 %description
 
-Prometheus exporter for machine metrics, written in Go with pluggable metric collectors.
+Rabbutmq exporter for machine metrics for prometheus
 
 %prep
-%setup -q -n node_exporter-%{version}.linux-amd64
+%setup -q -n rabbitmq_exporter-%{version}.linux-amd64
 
 %build
 echo
@@ -32,9 +34,9 @@ mkdir -vp $RPM_BUILD_ROOT/var/lib/prometheus
 mkdir -vp $RPM_BUILD_ROOT/usr/bin
 mkdir -vp $RPM_BUILD_ROOT/etc/init.d
 mkdir -vp $RPM_BUILD_ROOT/etc/sysconfig
-install -m 755 node_exporter-%{version}.linux-amd64/node_exporter $RPM_BUILD_ROOT/usr/bin/node_exporter
-install -m 755 contrib/node_exporter.init $RPM_BUILD_ROOT/etc/init.d/node_exporter
-install -m 644 contrib/node_exporter.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/node_exporter
+install -m 755 rabbitmq_exporter-%{version}.linux-amd64/rabbitmq_exporter $RPM_BUILD_ROOT/usr/bin/rabbitmq_exporter
+install -m 755 contrib/rabbitmq_exporter.init $RPM_BUILD_ROOT/etc/init.d/rabbitmq_exporter
+install -m 644 contrib/rabbitmq_exporter.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/rabbitmq_exporter
 
 %clean
 
@@ -53,8 +55,8 @@ chmod 744 /var/log/prometheus
 
 %files
 %defattr(-,root,root,-)
-/usr/bin/node_exporter
-/etc/init.d/node_exporter
-%config(noreplace) /etc/sysconfig/node_exporter
+/usr/bin/rabbitmq_exporter
+/etc/init.d/rabbitmq_exporter
+%config(noreplace) /etc/sysconfig/rabbitmq_exporter
 /var/run/prometheus
 /var/log/prometheus
